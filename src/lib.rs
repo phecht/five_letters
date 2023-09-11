@@ -6,46 +6,70 @@ use std::io::prelude::*;
 // use std::error::Error;
 use rand::Rng;
 
-fn checkanswer(mut grid: Vec<String>) -> Result<Vec<(char,i32)>,std::io::Error> {
+fn checkanswer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Error> {
     // pop the answer and entry words off th Vec.
     let entry = grid.pop().unwrap();
     let answer: String = grid.pop().unwrap();
+    //let answer: String = grid[i].unwrap();
+
+    // define a Vec with a (char, i32) that will hold the return
+    let mut inchars: Vec<(char, i32)> = Vec::new();
+    // let mut count_chars: Vec<(char,i32)> = Vec::new();
+
+    if answer.eq(&entry) {
+        inchars.push((' ', 5));
+        return Ok(inchars);
+    }
 
     // split them in chars
     let echars: Vec<char> = entry.chars().collect();
-    let achars: Vec<char> = answer.chars().collect();
+    let mut achars: Vec<char> = answer.chars().collect();
+    // let achars_length  = achars.len();
 
-    // define a Vec with a (char, i32) that will hold the return
-    let mut inchars: Vec<(char,i32)> = Vec::new();
 
     // initialize the inchars with the entry.
     for ae in &echars {
-        inchars.push((*ae,0));
-        
+        inchars.push((*ae, 0));
     }
 
     // inefficiently compare each char in entry.
     // 0 not in answer
     // 1 correct position
-    // 2 in word but incorrect position.  
+    // 2 in word but incorrect position.
+    // TODO: If the letter is a 1 or 2 make sure you handle a character
+    // appearing twice.
+
     let mut count = 0;
     for e in echars {
         // println!("{}",e);
         if e == achars[count] {
             // println!("This char is in correct position {}", e);
-            inchars[count] = (e,1);
-            
+            inchars[count] = (e, 1);
+            achars[count] = ' ';
         } else if achars.contains(&e) {
             // println!("{} letter is not in proper place", e);
-            inchars[count] = (e,2);
+            inchars[count] = (e, 2);
+
+            let in_word_char = e;
+            // println!("in_word_char {}",in_word_char) ;
+            for i in 0..achars.len() {
+                // println!("{:?}", achars);
+                if in_word_char == achars[i] {
+                    achars[i] = ' ';
+                    break;
+                }
+ 
+            }
+
         }
+        // println!("achars {:?}", achars);    
+
         count = count + 1;
     }
     //println!("{:?}",inchars);
     Ok(inchars)
 }
 
-// }
 
 fn myread(filename: &str) -> Result<String, std::io::Error> {
     let mut file = File::open(filename)?;
@@ -53,7 +77,7 @@ fn myread(filename: &str) -> Result<String, std::io::Error> {
     let mut data = String::new();
     file.read_to_string(&mut data).map(|_| data)
 }
-// -> Result<String, Box<dyn Error>>
+
 fn randomword() -> String {
     let filename = "./5letterwords.txt";
 
@@ -74,8 +98,8 @@ fn randomword() -> String {
     let num = rand::thread_rng().gen_range(0..searchlist.len());
     let theword = searchlist[num];
 
-    println!("Random word: {:?}", theword);
-    println!("Random number: {:?}", num);
+    //    println!("Random word: {:?}", theword);
+    //    println!("Random number: {:?}", num);
     theword.to_string()
 }
 
@@ -96,31 +120,50 @@ fn getword() -> String {
             break;
         }
     }
-    i1.to_string()
+    i1.to_string().to_lowercase()
 }
 
+/* fn printcheck(printdata: Vec<(char,i32)>) {
+    for i in 0..4 {
+        println!(printdata[i]);
+    }
+} */
+
 pub fn run() -> String {
+    let mut grid: Vec<String> = Vec::new();
     let answer = randomword();
     if answer.len() == 0 {
         return "".to_string();
     }
-    let entry6 = getword();
-
-    // For some reason randomword returns 6 characters.  Probably a \n.
-    // It won't match if the \n is present.
-    let entry: &str = &entry6[0..entry6.len() - 1];
-
-    let mut grid: Vec<String> = Vec::new();
     grid.push(answer.clone());
-    grid.push(entry.clone().to_string());
-    println!("{:?}",checkanswer(grid).unwrap());
+    // We need to create a loop and when the return is anser = entry win
+    // Otherwise give an amount of guesses.
 
-    println!("Length of answer:{} entry:{}", answer.len(), entry.len());
-    if answer.eq(&entry) {
-        println!("Match!");
-    } else {
-        println!("No Match!");
+    for i in 0..6 {
+        println!("Guess #:{}", i+1);
+        let entry6 = getword();
+
+        // For some reason randomword returns 6 characters.  Probably a \n.
+        // It won't match if the \n is present.
+        let entry: String = entry6[0..entry6.len() - 1].to_string();
+
+        // If there is already a wrong answer, pop it off the stack.
+        if grid.len() != 1 {
+            grid.pop();
+        }
+        grid.push(entry.clone());
+        println!("{:?}", checkanswer(grid.clone()).unwrap());
+        println!("Length of answer:{} entry:{}", answer.len(), entry.len());
+        if answer.eq(&entry) {
+            println!("Match!");
+            break;
+        } /* else {
+            println!("No Match! the word was {:?}", answer);
+        } */
+        // println!("Words: {} {}", answer, entry);
     }
-    println!("Words: {} {}", answer, entry);
+
+    // println!("{:?}",grid);
+
     answer
 }
