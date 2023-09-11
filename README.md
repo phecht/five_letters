@@ -1,5 +1,5 @@
 # five_letters
-### This is one of my first original Rust program.  I have to thank the users on Reddit for their help.
+### This is my first original Rust program.  I have to thank the users on Reddit for their help.
 
 
 | Rank | TODO  |
