@@ -1,5 +1,5 @@
 //use std::fs;
-use std::fs::File;
+// use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 
@@ -25,7 +25,6 @@ fn checkanswer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Error
     let echars: Vec<char> = entry.chars().collect();
     let mut achars: Vec<char> = answer.chars().collect();
     // let achars_length  = achars.len();
-
 
     // initialize the inchars with the entry.
     for ae in &echars {
@@ -58,11 +57,9 @@ fn checkanswer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Error
                     achars[i] = ' ';
                     break;
                 }
- 
             }
-
         }
-        // println!("achars {:?}", achars);    
+        // println!("achars {:?}", achars);
 
         count = count + 1;
     }
@@ -70,38 +67,27 @@ fn checkanswer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Error
     Ok(inchars)
 }
 
+pub struct Words(Vec<String>);
 
-fn myread(filename: &str) -> Result<String, std::io::Error> {
-    let mut file = File::open(filename)?;
+impl Words {
+    pub fn new() -> Self {
+        let text = std::fs::read_to_string("./5letterwords.txt").unwrap();
+        let words: Vec<String> = text.trim().lines().map(|v| v.to_string()).collect();
+        Self(words)
+    }
 
-    let mut data = String::new();
-    file.read_to_string(&mut data).map(|_| data)
+    pub fn pick_at_random(&self) -> &str {
+        // Get a random number.
+        let num = rand::thread_rng().gen_range(0..self.0.len());
+        // Return a word
+        &self.0[num]
+    }
+    pub fn check_word_is_valid(&self, word: &str) -> bool {
+        let ret = &self.0.contains(&word.to_string());
+        *ret
+    }
 }
 
-fn randomword() -> String {
-    let filename = "./5letterwords.txt";
-
-    // let list = myread(filename).unwrap();
-    let mut list = "".to_string();
-    match myread(filename) {
-        Ok(contents) => list = contents,
-        Err(err) => println!("Unable to open file {}! Error:{}", filename, err),
-    }
-    //let list = fs::read_to_string(filename).unwrap();
-
-    let searchlist: Vec<&str> = list.trim().split("\n").collect();
-
-    println!("{:?}", searchlist.len());
-    if searchlist.len() == 1 {
-        println!("File {} doesn't exist!", filename)
-    }
-    let num = rand::thread_rng().gen_range(0..searchlist.len());
-    let theword = searchlist[num];
-
-    //    println!("Random word: {:?}", theword);
-    //    println!("Random number: {:?}", num);
-    theword.to_string()
-}
 
 fn getword() -> String {
     let mut s1 = io::stdin().lock();
@@ -123,29 +109,38 @@ fn getword() -> String {
     i1.to_string().to_lowercase()
 }
 
-/* fn printcheck(printdata: Vec<(char,i32)>) {
-    for i in 0..4 {
-        println!(printdata[i]);
-    }
-} */
-
 pub fn run() -> String {
+
     let mut grid: Vec<String> = Vec::new();
-    let answer = randomword();
+    //let answer = randomword();
+    // let the_words = Words;
+
+    let binding = Words::new();
+    let answer = Words::pick_at_random(&binding);
+
     if answer.len() == 0 {
         return "".to_string();
     }
-    grid.push(answer.clone());
+    grid.push(answer.to_string());
     // We need to create a loop and when the return is anser = entry win
     // Otherwise give an amount of guesses.
 
     for i in 0..6 {
-        println!("Guess #:{}", i+1);
-        let entry6 = getword();
-
-        // For some reason randomword returns 6 characters.  Probably a \n.
+        println!("Guess #:{}", i + 1);
+        let mut entry = getword();
+        loop {
+                   // For some reason randomword returns 6 characters.  Probably a \n.
         // It won't match if the \n is present.
-        let entry: String = entry6[0..entry6.len() - 1].to_string();
+            entry = entry[0..entry.len() - 1].to_string();
+            if Words::check_word_is_valid(&binding, &entry) {
+                
+                break;
+            }
+            println!("{} not in dictionary!",entry);
+            entry = getword();
+        }
+
+
 
         // If there is already a wrong answer, pop it off the stack.
         if grid.len() != 1 {
@@ -153,17 +148,17 @@ pub fn run() -> String {
         }
         grid.push(entry.clone());
         println!("{:?}", checkanswer(grid.clone()).unwrap());
-        println!("Length of answer:{} entry:{}", answer.len(), entry.len());
+        // println!("Length of answer:{} entry:{}", answer.len(), entry.len());
         if answer.eq(&entry) {
             println!("Match!");
             break;
         } /* else {
-            println!("No Match! the word was {:?}", answer);
-        } */
+              println!("No Match! the word was {:?}", answer);
+          } */
         // println!("Words: {} {}", answer, entry);
     }
 
     // println!("{:?}",grid);
 
-    answer
+    answer.to_string()
 }
