@@ -67,6 +67,26 @@ fn checkanswer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Error
     Ok(inchars)
 }
 
+// Instructions might be a useful struct.
+pub struct Instructions();
+
+impl Instructions {
+    fn guess_instructions() -> String {
+
+        let ret  = String::from("Enter a word of five characters");
+        ret
+    }
+
+    fn general_instructions() -> String {
+
+        let mut ret  = String::from("Currently, the return after the guess shows\nthe character and a 1,2 or zero.\n");
+        ret = ret + "1 means the character is in the correct position\n\
+            2 means the character is the word in the wrong position\n\
+            0 means the character is not in the word";
+        ret
+    }
+}
+// Words might of been better named dictionary.  
 pub struct Words(Vec<String>);
 
 impl Words {
@@ -88,33 +108,32 @@ impl Words {
     }
 }
 
-
-fn getword() -> String {
-    let mut s1 = io::stdin().lock();
-    let i1 = &mut String::new();
+fn get_word() -> String {
+    let mut std_input_lock = io::stdin().lock();
+    let input_word = &mut String::new();
     loop {
-        i1.clear();
+        input_word.clear();
         println!("{}", "enter word:");
-        match s1.read_line(i1) {
+        match std_input_lock.read_line(input_word) {
             Err(e) => println!("{:?}", e),
             _ => (),
         }
-        let chars: Vec<char> = i1.chars().collect();
+        let chars: Vec<char> = input_word.chars().collect();
+        // TODO: Update to handle a '?' or possibly other characters and phrases.
         if chars.len() != 6 {
             println!("Not 5 letters");
         } else {
             break;
         }
     }
-    i1.to_string().to_lowercase()
+    input_word.to_string().to_lowercase()
 }
 
 pub fn run() -> String {
 
     let mut grid: Vec<String> = Vec::new();
-    //let answer = randomword();
-    // let the_words = Words;
 
+    // Implement the Words public structure to get the answer.
     let binding = Words::new();
     let answer = Words::pick_at_random(&binding);
 
@@ -122,22 +141,24 @@ pub fn run() -> String {
         return "".to_string();
     }
     grid.push(answer.to_string());
-    // We need to create a loop and when the return is anser = entry win
+    // We need to create a loop and when the return is answer = entry win
     // Otherwise give an amount of guesses.
 
+    println!("{}",Instructions::general_instructions());
     for i in 0..6 {
         println!("Guess #:{}", i + 1);
-        let mut entry = getword();
+        println!("{}",Instructions::guess_instructions());
+        let mut entry = get_word();
         loop {
-                   // For some reason randomword returns 6 characters.  Probably a \n.
+        // For some reason randomword returns 6 characters.  Probably a \n.
         // It won't match if the \n is present.
             entry = entry[0..entry.len() - 1].to_string();
             if Words::check_word_is_valid(&binding, &entry) {
                 
                 break;
             }
-            println!("{} not in dictionary!",entry);
-            entry = getword();
+            println!("{} not in dictionary! Please try again! CTRL+C to quit.",entry);
+            entry = get_word();
         }
 
 

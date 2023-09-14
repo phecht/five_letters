@@ -22,7 +22,7 @@ along
 alter
 among
 anger
-Angle
+angle
 angry
 apart
 apple
@@ -101,10 +101,12 @@ close
 coach
 coast
 could
+couch
 count
 court
 cover
 craft
+crane
 crash
 cream
 crime
@@ -133,6 +135,7 @@ drill
 drink
 drive
 drove
+drunk
 dying
 eager
 early
@@ -151,6 +154,7 @@ every
 exact
 exist
 extra
+facts
 faith
 false
 fault
@@ -167,6 +171,7 @@ fleet
 floor
 fluid
 focus
+fools
 force
 forth
 forty
@@ -179,7 +184,9 @@ fresh
 front
 fruit
 fully
+fumes
 funny
+ghost
 giant
 given
 glass
@@ -203,8 +210,11 @@ happy
 harry
 heart
 heavy
+hello
 hence
 henry
+hitch
+hopes
 horse
 hotel
 house
@@ -240,6 +250,7 @@ links
 lives
 local
 logic
+loops
 loose
 lower
 lucky
@@ -306,6 +317,7 @@ plane
 plant
 plate
 point
+pools
 pound
 power
 press
@@ -322,6 +334,7 @@ queen
 quick
 quiet
 quite
+quits
 radio
 raise
 range
@@ -342,6 +355,7 @@ route
 royal
 rummy
 rural
+sadly
 scale
 scene
 scope
@@ -370,6 +384,8 @@ sized
 skill
 sleep
 slide
+slipt
+slush
 small
 smart
 smile
@@ -388,6 +404,7 @@ spend
 spent
 split
 spoke
+spoon
 sport
 staff
 stage
@@ -395,8 +412,10 @@ stake
 stand
 start
 state
+steak
 steam
 steel
+steep
 stick
 still
 stock
@@ -486,8 +505,10 @@ while
 white
 whole
 whose
+witch
 woman
 women
+words
 world
 worry
 worse
@@ -497,3 +518,5 @@ would
 wound
 write
 wrong
+zebra
+zeros
