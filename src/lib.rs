@@ -6,7 +6,7 @@ use std::io::prelude::*;
 // use std::error::Error;
 use rand::Rng;
 
-fn checkanswer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Error> {
+fn check_answer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Error> {
     // pop the answer and entry words off th Vec.
     let entry = grid.pop().unwrap();
     let answer: String = grid.pop().unwrap();
@@ -79,13 +79,14 @@ impl Instructions {
 
     fn general_instructions() -> String {
 
-        let mut ret  = String::from("Currently, the return after the guess shows\nthe character and a 1,2 or zero.\n");
-        ret = ret + "1 means the character is in the correct position\n\
-            2 means the character is the word in the wrong position\n\
-            0 means the character is not in the word";
+        let mut ret  = String::from("Currently, the return after the guess shows\nthe character in green, yellow or red.\n");
+        ret = ret + "green" + "means the character is in the correct position\n\
+            yellow means the character is the word in the wrong position\n\
+            red means the character is not in the word";
         ret
     }
 }
+
 // Words might of been better named dictionary.  
 pub struct Words(Vec<String>);
 
@@ -129,7 +130,117 @@ fn get_word() -> String {
     input_word.to_string().to_lowercase()
 }
 
+#[derive(Debug, Clone)]
+pub struct Key {
+    character: char,
+    row: u8,
+     // pos: u8,
+    value: u8,
+}
+
+
+use colored::Colorize;
+fn print_keys(keys: &Vec<Key>) {
+    let mut this_row = 0 as u8;
+    for i in 0..keys.len() {
+        if this_row != keys[i].row {
+            println!("");
+            this_row = keys[i].row;
+        }
+        match keys[i].value {
+            4 => print!("{} ", keys[i].character.to_string().red().on_red()),
+            5 => print!("{} ", keys[i].character.to_string().green()),
+            6 => print!("{} ", keys[i].character.to_string().yellow()),
+            _ => print!("{} ", keys[i].character.to_string().blue()),
+        }
+
+    
+    }
+    println!("");
+
+}
+
+fn print_entry(keys: &Vec<(char, i32)>) {
+    // let mut this_row = 0 as u8;
+    for i in 0..keys.len() {
+
+        match keys[i].1 {
+            0 => print!("{} ", keys[i].0.to_string().red()),
+            1 => print!("{} ", keys[i].0.to_string().green()),
+            2 => print!("{} ", keys[i].0.to_string().yellow()),
+            _ => print!("{} ", keys[i].0.to_string().blue()),
+        }
+
+    
+    }
+    println!("");
+
+}
+
+fn update_keys(current_entry: &Vec<(char, i32)>, keyboard: Vec<Key>) -> Vec<Key> {
+    // update keyboard based on current_entry
+    // for each enty check keyboard for a 0,1, or 2.
+    let mut ret = keyboard;
+    // let mut character = ' ';
+    // let mut letter_value = 0 as u8;
+
+    for i in 0..current_entry.len() {
+        let character = current_entry[i].0;
+        let mut letter_value = current_entry[i].1 as u8;
+        if letter_value == 0 {
+            letter_value = 4;
+        }
+        if letter_value == 1 {
+            letter_value = 5;
+        }
+        if letter_value == 2 {
+            letter_value = 6;
+        }
+        for i in 0..ret.len() {
+            if ret[i].character == character {
+                ret[i].value = letter_value;
+                break;
+            }
+
+        }
+
+    }
+    ret
+/*     for entry in current_entry.into_iter() {
+        keyboard.find(|&entry| )
+
+    } */
+
+
+
+}
+fn create_keys() -> Vec<Key> {
+    let mut keys: Vec<Key> = Vec::new();
+    let top_keys = "qwertyuiop";
+    let mid_keys = "asdfghjkl";
+    let bot_keys = "zxcvbnm";
+    // let mut count = 0;
+    for c in top_keys.chars().into_iter() {
+        keys.push(Key{character:c, row: 0,  value: 0});
+    }
+    for c in mid_keys.chars().into_iter() {
+        keys.push(Key{character:c, row: 1,  value: 0});
+    }
+    for c  in bot_keys.chars().into_iter() {
+        keys.push(Key{character:c, row: 2, value: 0});
+    }
+     
+    keys
+
+}
+
 pub fn run() -> String {
+
+    
+    let mut keyboard = create_keys();
+    print_keys(&keyboard);
+
+    // println!("{:?}", create_keys());
 
     let mut grid: Vec<String> = Vec::new();
 
@@ -161,14 +272,15 @@ pub fn run() -> String {
             entry = get_word();
         }
 
-
-
         // If there is already a wrong answer, pop it off the stack.
         if grid.len() != 1 {
             grid.pop();
         }
         grid.push(entry.clone());
-        println!("{:?}", checkanswer(grid.clone()).unwrap());
+        let this_entry = check_answer(grid.clone()).unwrap();
+        keyboard = update_keys(&this_entry, keyboard.clone());
+        print_keys(&keyboard);
+        print_entry(&this_entry);
         // println!("Length of answer:{} entry:{}", answer.len(), entry.len());
         if answer.eq(&entry) {
             println!("Match!");
