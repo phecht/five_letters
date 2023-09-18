@@ -65,6 +65,7 @@ booth
 bound
 brain
 brand
+brash
 bread
 break
 breed
@@ -116,6 +117,7 @@ crime
 cross
 crowd
 crown
+curse
 curve
 cycle
 daily
@@ -125,6 +127,7 @@ dealt
 death
 debut
 delay
+dense
 depth
 doing
 doubt
@@ -163,6 +166,7 @@ facts
 faith
 false
 fault
+feels
 fiber
 field
 fifth
@@ -173,7 +177,9 @@ first
 fixed
 flash
 fleet
+flood
 floor
+flown
 fluid
 focus
 fools
@@ -198,6 +204,7 @@ giant
 given
 glass
 globe
+gloom
 going
 grace
 grade
@@ -232,6 +239,7 @@ image
 index
 inner
 input
+inuse
 issue
 japan
 jimmy
@@ -259,6 +267,7 @@ links
 lives
 loans
 local
+locks
 logic
 loops
 loose
@@ -330,6 +339,7 @@ plain
 plane
 plant
 plate
+poems
 point
 pools
 pound
@@ -344,6 +354,7 @@ prize
 proof
 proud
 prove
+pulse
 queen
 quick
 quiet
@@ -455,6 +466,7 @@ taste
 taxes
 teach
 teeth
+tense
 terry
 texas
 thank
