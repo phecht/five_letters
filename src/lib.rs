@@ -1,5 +1,6 @@
 //use std::fs;
 // use std::fs::File;
+use colored::{ColoredString, Colorize};
 use std::io;
 use std::io::prelude::*;
 
@@ -14,7 +15,6 @@ fn check_answer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Erro
 
     // define a Vec with a (char, i32) that will hold the return
     let mut inchars: Vec<(char, i32)> = Vec::new();
-    // let mut count_chars: Vec<(char,i32)> = Vec::new();
 
     if answer.eq(&entry) {
         inchars.push((' ', 5));
@@ -39,31 +39,52 @@ fn check_answer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Erro
     // appearing twice.
 
     let mut count = 0;
-    for e in echars {
+    // DO a loop through the entry and mark, then remove letters
+    // in the entry.
+    for e in &echars {
         // println!("{}",e);
-        if e == achars[count] {
+        if e == &achars[count] {
             // println!("This char is in correct position {}", e);
-            inchars[count] = (e, 1);
+            inchars[count] = (*e, 1);
             achars[count] = ' ';
-        } else if achars.contains(&e) {
-            // println!("{} letter is not in proper place", e);
-            inchars[count] = (e, 2);
-
-            let in_word_char = e;
-            // println!("in_word_char {}",in_word_char) ;
-            for i in 0..achars.len() {
-                // println!("{:?}", achars);
-                if in_word_char == achars[i] {
-                    achars[i] = ' ';
-                    break;
-                }
-            }
         }
         // println!("achars {:?}", achars);
 
         count = count + 1;
     }
-    //println!("{:?}",inchars);
+
+/*     println!("achars: {:?}", achars);
+    println!("echars: {:?}", echars);
+    println!("inchars: {:?}", inchars);
+ */
+    // With the letters in exact position,
+    // Check for letters in the wrong position
+    // count = 0;
+    for e in &echars {
+        // println!("Checking {}", e);
+        if achars.contains(&e) {
+            // println!("Found {}", e);
+            let afoundindex = achars.iter().position(|r| r == e).unwrap();
+            // let efoundindex = echars.iter().position(|r| r == e).unwrap();
+
+            // println!("{:?}", afoundindex);
+            achars[afoundindex] = ' ';
+            for i in 0..achars.len() {
+                if inchars[i].0 == *e {
+                    if inchars[i].1 == 0 {
+                        // println!("Updating inchars[{}]", i);
+                        inchars[i].1 = 2;
+                        break;
+                    }
+                }
+            }
+        }
+        
+    }
+
+/*     println!("achars: {:?}", achars);
+    println!("echars: {:?}", echars);
+    println!("inchars: {:?}", inchars); */
     Ok(inchars)
 }
 
@@ -72,22 +93,26 @@ pub struct Instructions();
 
 impl Instructions {
     fn guess_instructions() -> String {
-
-        let ret  = String::from("Enter a word of five characters");
+        let ret = String::from("Enter a word of five characters");
         ret
     }
 
     fn general_instructions() -> String {
-
-        let mut ret  = String::from("Currently, the return after the guess shows\nthe character in green, yellow or red.\n");
-        ret = ret + "green" + "means the character is in the correct position\n\
+        let mut ret = String::from(
+            "Currently, the return after the guess shows\nthe character in green, yellow or red.\n",
+        );
+        ret = ret
+            + "green "
+            + "means the character is in the correct position\n\
             yellow means the character is the word in the wrong position\n\
             red means the character is not in the word";
+        let cs = ColoredString::from("");
+        println!("{}", cs.blue());
         ret
     }
 }
 
-// Words might of been better named dictionary.  
+// Words might of been better named dictionary.
 pub struct Words(Vec<String>);
 
 impl Words {
@@ -134,12 +159,10 @@ fn get_word() -> String {
 pub struct Key {
     character: char,
     row: u8,
-     // pos: u8,
+    // pos: u8,
     value: u8,
 }
 
-
-use colored::Colorize;
 fn print_keys(keys: &Vec<Key>) {
     let mut this_row = 0 as u8;
     for i in 0..keys.len() {
@@ -153,28 +176,21 @@ fn print_keys(keys: &Vec<Key>) {
             6 => print!("{} ", keys[i].character.to_string().yellow()),
             _ => print!("{} ", keys[i].character.to_string().blue()),
         }
-
-    
     }
     println!("");
-
 }
 
 fn print_entry(keys: &Vec<(char, i32)>) {
     // let mut this_row = 0 as u8;
     for i in 0..keys.len() {
-
         match keys[i].1 {
             0 => print!("{} ", keys[i].0.to_string().red()),
             1 => print!("{} ", keys[i].0.to_string().green()),
             2 => print!("{} ", keys[i].0.to_string().yellow()),
             _ => print!("{} ", keys[i].0.to_string().blue()),
         }
-
-    
     }
     println!("");
-
 }
 
 fn update_keys(current_entry: &Vec<(char, i32)>, keyboard: Vec<Key>) -> Vec<Key> {
@@ -201,18 +217,13 @@ fn update_keys(current_entry: &Vec<(char, i32)>, keyboard: Vec<Key>) -> Vec<Key>
                 ret[i].value = letter_value;
                 break;
             }
-
         }
-
     }
     ret
-/*     for entry in current_entry.into_iter() {
+    /*     for entry in current_entry.into_iter() {
         keyboard.find(|&entry| )
 
     } */
-
-
-
 }
 fn create_keys() -> Vec<Key> {
     let mut keys: Vec<Key> = Vec::new();
@@ -221,22 +232,31 @@ fn create_keys() -> Vec<Key> {
     let bot_keys = "zxcvbnm";
     // let mut count = 0;
     for c in top_keys.chars().into_iter() {
-        keys.push(Key{character:c, row: 0,  value: 0});
+        keys.push(Key {
+            character: c,
+            row: 0,
+            value: 0,
+        });
     }
     for c in mid_keys.chars().into_iter() {
-        keys.push(Key{character:c, row: 1,  value: 0});
+        keys.push(Key {
+            character: c,
+            row: 1,
+            value: 0,
+        });
     }
-    for c  in bot_keys.chars().into_iter() {
-        keys.push(Key{character:c, row: 2, value: 0});
+    for c in bot_keys.chars().into_iter() {
+        keys.push(Key {
+            character: c,
+            row: 2,
+            value: 0,
+        });
     }
-     
-    keys
 
+    keys
 }
 
 pub fn run() -> String {
-
-    
     let mut keyboard = create_keys();
     print_keys(&keyboard);
 
@@ -247,6 +267,7 @@ pub fn run() -> String {
     // Implement the Words public structure to get the answer.
     let binding = Words::new();
     let answer = Words::pick_at_random(&binding);
+    //let answer = "needs";
 
     if answer.len() == 0 {
         return "".to_string();
@@ -255,20 +276,22 @@ pub fn run() -> String {
     // We need to create a loop and when the return is answer = entry win
     // Otherwise give an amount of guesses.
 
-    println!("{}",Instructions::general_instructions());
+    println!("{}", Instructions::general_instructions());
     for i in 0..6 {
         println!("Guess #:{}", i + 1);
-        println!("{}",Instructions::guess_instructions());
+        println!("{}", Instructions::guess_instructions());
         let mut entry = get_word();
         loop {
-        // For some reason randomword returns 6 characters.  Probably a \n.
-        // It won't match if the \n is present.
+            // For some reason randomword returns 6 characters.  Probably a \n.
+            // It won't match if the \n is present.
             entry = entry[0..entry.len() - 1].to_string();
             if Words::check_word_is_valid(&binding, &entry) {
-                
                 break;
             }
-            println!("{} not in dictionary! Please try again! CTRL+C to quit.",entry);
+            println!(
+                "{} not in dictionary! Please try again! CTRL+C to quit.",
+                entry
+            );
             entry = get_word();
         }
 
