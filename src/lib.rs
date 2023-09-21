@@ -50,13 +50,13 @@ fn check_answer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Erro
         }
         // println!("achars {:?}", achars);
 
-        count = count + 1;
+        count += 1;
     }
 
 
     for e in &echars {
         // println!("Checking {}", e);
-        if achars.contains(&e) {
+        if achars.contains(e) {
             // println!("Found {}", e);
             let afoundindex = achars.iter().position(|r| r == e).unwrap();
             // let efoundindex = echars.iter().position(|r| r == e).unwrap();
@@ -64,12 +64,10 @@ fn check_answer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Erro
             // println!("{:?}", afoundindex);
             achars[afoundindex] = ' ';
             for i in 0..achars.len() {
-                if inchars[i].0 == *e {
-                    if inchars[i].1 == 0 {
+                if inchars[i].0 == *e && inchars[i].1 == 0 {
                         // println!("Updating inchars[{}]", i);
                         inchars[i].1 = 2;
                         break;
-                    }
                 }
             }
         }
@@ -158,33 +156,42 @@ pub struct Key {
 }
 
 fn print_keys(keys: &Vec<Key>) {
-    let mut this_row = 0 as u8;
-    for i in 0..keys.len() {
-        if this_row != keys[i].row {
-            println!("");
-            this_row = keys[i].row;
+    let mut this_row = 0_u8;
+    for key in keys {
+        if this_row != key.row {
+            println!();
+            this_row = key.row;
         }
-        match keys[i].value {
-            4 => print!("{} ", keys[i].character.to_string().red().on_red()),
-            5 => print!("{} ", keys[i].character.to_string().green()),
-            6 => print!("{} ", keys[i].character.to_string().yellow()),
-            _ => print!("{} ", keys[i].character.to_string().blue()),
+        match key.value {
+            4 => print!("{} ", key.character.to_string().red().on_red()),
+            5 => print!("{} ", key.character.to_string().green()),
+            6 => print!("{} ", key.character.to_string().yellow()),
+            _ => print!("{} ", key.character.to_string().blue()),
         }
     }
-    println!("");
+    println!();
 }
 
 fn print_entry(keys: &Vec<(char, i32)>) {
-    // let mut this_row = 0 as u8;
-    for i in 0..keys.len() {
+
+    for key in keys {
+        match key.1 {
+            0 => print!("{} ", key.0.to_string().red()),
+            1 => print!("{} ", key.0.to_string().green()),
+            2 => print!("{} ", key.0.to_string().yellow()),
+            _ => print!("{} ", key.0.to_string().blue()),           
+        }
+
+    }
+/*     for i in 0..keys.len() {
         match keys[i].1 {
             0 => print!("{} ", keys[i].0.to_string().red()),
             1 => print!("{} ", keys[i].0.to_string().green()),
             2 => print!("{} ", keys[i].0.to_string().yellow()),
             _ => print!("{} ", keys[i].0.to_string().blue()),
         }
-    }
-    println!("");
+    } */
+    println!();
 }
 
 fn update_keys(current_entry: &Vec<(char, i32)>, keyboard: Vec<Key>) -> Vec<Key> {
@@ -225,21 +232,21 @@ fn create_keys() -> Vec<Key> {
     let mid_keys = "asdfghjkl";
     let bot_keys = "zxcvbnm";
     // let mut count = 0;
-    for c in top_keys.chars().into_iter() {
+    for c in top_keys.chars() {
         keys.push(Key {
             character: c,
             row: 0,
             value: 0,
         });
     }
-    for c in mid_keys.chars().into_iter() {
+    for c in mid_keys.chars() {
         keys.push(Key {
             character: c,
             row: 1,
             value: 0,
         });
     }
-    for c in bot_keys.chars().into_iter() {
+    for c in bot_keys.chars() {
         keys.push(Key {
             character: c,
             row: 2,
@@ -263,7 +270,7 @@ pub fn run() -> String {
     let answer = Words::pick_at_random(&binding);
     // let answer = "needs";
 
-    if answer.len() == 0 {
+    if answer.is_empty() {
         return "".to_string();
     }
     grid.push(answer.to_string());
