@@ -4,6 +4,10 @@
 
 | Rank | TODO  |
 |-----:|---------------|
-|     1| Check word is in dictionary              |
-|     2| Make interface easier to read              |
-|     3| Setup ability to help solve NYT Wordle              |
+|     1| ~~Check word is in dictionary~~              |
+|     2| ~~Make interface easier to read~~              |
+|     3|               |
+|     4| Setup ability to help solve NYT Wordle |
+
+Random notes:
+cat 5letterwords.txt | sed -n '/^ne..y$/p'

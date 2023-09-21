@@ -53,13 +53,7 @@ fn check_answer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Erro
         count = count + 1;
     }
 
-/*     println!("achars: {:?}", achars);
-    println!("echars: {:?}", echars);
-    println!("inchars: {:?}", inchars);
- */
-    // With the letters in exact position,
-    // Check for letters in the wrong position
-    // count = 0;
+
     for e in &echars {
         // println!("Checking {}", e);
         if achars.contains(&e) {
@@ -267,7 +261,7 @@ pub fn run() -> String {
     // Implement the Words public structure to get the answer.
     let binding = Words::new();
     let answer = Words::pick_at_random(&binding);
-    //let answer = "needs";
+    // let answer = "needs";
 
     if answer.len() == 0 {
         return "".to_string();
