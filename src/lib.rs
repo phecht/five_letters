@@ -38,10 +38,10 @@ fn check_answer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Erro
     // TODO: If the letter is a 1 or 2 make sure you handle a character
     // appearing twice.
 
-    let mut count = 0;
+    //   let mut count = 0;
     // DO a loop through the entry and mark, then remove letters
     // in the entry.
-    for e in &echars {
+    for (count, e) in echars.iter().enumerate() {
         // println!("{}",e);
         if e == &achars[count] {
             // println!("This char is in correct position {}", e);
@@ -50,9 +50,8 @@ fn check_answer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Erro
         }
         // println!("achars {:?}", achars);
 
-        count += 1;
+        // count += 1;
     }
-
 
     for e in &echars {
         // println!("Checking {}", e);
@@ -63,18 +62,24 @@ fn check_answer(mut grid: Vec<String>) -> Result<Vec<(char, i32)>, std::io::Erro
 
             // println!("{:?}", afoundindex);
             achars[afoundindex] = ' ';
-            for i in 0..achars.len() {
-                if inchars[i].0 == *e && inchars[i].1 == 0 {
-                        // println!("Updating inchars[{}]", i);
-                        inchars[i].1 = 2;
-                        break;
+            for item in inchars.iter_mut().take(achars.len()) {
+                if item.0 == *e && item.1 == 0 { 
+                    item.1 = 2;
+                    break;
                 }
             }
+
+/*             for i in 0..achars.len() {
+                if inchars[i].0 == *e && inchars[i].1 == 0 {
+                    // println!("Updating inchars[{}]", i);
+                    inchars[i].1 = 2;
+                    break;
+                }
+            } */
         }
-        
     }
 
-/*     println!("achars: {:?}", achars);
+    /*     println!("achars: {:?}", achars);
     println!("echars: {:?}", echars);
     println!("inchars: {:?}", inchars); */
     Ok(inchars)
@@ -85,8 +90,7 @@ pub struct Instructions();
 
 impl Instructions {
     fn guess_instructions() -> String {
-        let ret = String::from("Enter a word of five characters");
-        ret
+        String::from("Enter a word of five characters")
     }
 
     fn general_instructions() -> String {
@@ -126,16 +130,22 @@ impl Words {
     }
 }
 
+impl Default for Words {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 fn get_word() -> String {
     let mut std_input_lock = io::stdin().lock();
     let input_word = &mut String::new();
     loop {
         input_word.clear();
-        println!("{}", "enter word:");
-        match std_input_lock.read_line(input_word) {
+        println!("enter word:");
+/*         match std_input_lock.read_line(input_word) {
             Err(e) => println!("{:?}", e),
             _ => (),
-        }
+        } */
+        if let Err(e) = std_input_lock.read_line(input_word) { println!("{:?}", e) }
         let chars: Vec<char> = input_word.chars().collect();
         // TODO: Update to handle a '?' or possibly other characters and phrases.
         if chars.len() != 6 {
@@ -148,6 +158,7 @@ fn get_word() -> String {
 }
 
 #[derive(Debug, Clone)]
+/// Key represents 
 pub struct Key {
     character: char,
     row: u8,
@@ -173,17 +184,15 @@ fn print_keys(keys: &Vec<Key>) {
 }
 
 fn print_entry(keys: &Vec<(char, i32)>) {
-
     for key in keys {
         match key.1 {
             0 => print!("{} ", key.0.to_string().red()),
             1 => print!("{} ", key.0.to_string().green()),
             2 => print!("{} ", key.0.to_string().yellow()),
-            _ => print!("{} ", key.0.to_string().blue()),           
+            _ => print!("{} ", key.0.to_string().blue()),
         }
-
     }
-/*     for i in 0..keys.len() {
+    /*     for i in 0..keys.len() {
         match keys[i].1 {
             0 => print!("{} ", keys[i].0.to_string().red()),
             1 => print!("{} ", keys[i].0.to_string().green()),
@@ -201,9 +210,9 @@ fn update_keys(current_entry: &Vec<(char, i32)>, keyboard: Vec<Key>) -> Vec<Key>
     // let mut character = ' ';
     // let mut letter_value = 0 as u8;
 
-    for i in 0..current_entry.len() {
-        let character = current_entry[i].0;
-        let mut letter_value = current_entry[i].1 as u8;
+    for item in current_entry {
+        let character = item.0;
+        let mut letter_value = item.1;
         if letter_value == 0 {
             letter_value = 4;
         }
@@ -213,18 +222,15 @@ fn update_keys(current_entry: &Vec<(char, i32)>, keyboard: Vec<Key>) -> Vec<Key>
         if letter_value == 2 {
             letter_value = 6;
         }
-        for i in 0..ret.len() {
-            if ret[i].character == character {
-                ret[i].value = letter_value;
+        for i in &mut ret {
+            if i.character == character {
+                i.value = letter_value as u8;
                 break;
             }
         }
     }
     ret
-    /*     for entry in current_entry.into_iter() {
-        keyboard.find(|&entry| )
 
-    } */
 }
 fn create_keys() -> Vec<Key> {
     let mut keys: Vec<Key> = Vec::new();
@@ -232,23 +238,23 @@ fn create_keys() -> Vec<Key> {
     let mid_keys = "asdfghjkl";
     let bot_keys = "zxcvbnm";
     // let mut count = 0;
-    for c in top_keys.chars() {
+    for key_name in top_keys.chars() {
         keys.push(Key {
-            character: c,
+            character: key_name,
             row: 0,
             value: 0,
         });
     }
-    for c in mid_keys.chars() {
+    for key_name in mid_keys.chars() {
         keys.push(Key {
-            character: c,
+            character: key_name,
             row: 1,
             value: 0,
         });
     }
-    for c in bot_keys.chars() {
+    for key_name in bot_keys.chars() {
         keys.push(Key {
-            character: c,
+            character: key_name,
             row: 2,
             value: 0,
         });

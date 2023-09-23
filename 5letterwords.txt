@@ -62,15 +62,18 @@ black
 blame
 blind
 block
+blond
 blood
 blows
 board
+bonds
 boost
 booth
 bound
 brain
 brand
 brash
+brave
 bread
 break
 breed
@@ -115,6 +118,7 @@ clock
 clone
 close
 clown
+clues
 coach
 coast
 could
@@ -125,6 +129,7 @@ cover
 craft
 crane
 crash
+crawl
 cream
 crime
 cross
@@ -147,6 +152,7 @@ decay
 delay
 dense
 depth
+diner
 doing
 doors
 doubt
@@ -159,9 +165,11 @@ dream
 dress
 drill
 drink
+drips
 drive
 drove
 drunk
+ducks
 dusty
 dwell
 dying
@@ -199,6 +207,7 @@ final
 first
 fishy
 fixed
+flare
 flash
 flats
 fleet
@@ -244,10 +253,12 @@ grass
 great
 green
 greek
+grind
 gross
 grout
 group
 grown
+grows
 guard
 guess
 guest
@@ -328,6 +339,7 @@ match
 maybe
 mayor
 meant
+meats
 media
 meets
 merry
@@ -372,6 +384,7 @@ occur
 ocean
 offer
 often
+opera
 order
 other
 ought
@@ -381,6 +394,7 @@ panda
 panic
 panel
 paper
+parse
 party
 pasta
 paste
@@ -402,6 +416,9 @@ plain
 plane
 plant
 plate
+plows
+pluck
+plugs
 poems
 point
 pools
@@ -409,6 +426,7 @@ ports
 pouch
 pound
 power
+prank
 press
 price
 pride
@@ -441,12 +459,14 @@ reach
 react
 ready
 refer
+rerun
 retry
 rider
 rides
 right
 rival
 river
+roads
 robin
 roger
 roman
@@ -459,6 +479,7 @@ rummy
 rural
 sadly
 sails
+salts
 scale
 scene
 scope
@@ -486,9 +507,12 @@ sixty
 sized
 skill
 sleep
+slept
 slide
+slips
 slipt
 sloth
+slows
 slush
 small
 smart
@@ -520,6 +544,7 @@ start
 state
 steak
 steam
+steal
 steel
 steep
 stick
@@ -601,6 +626,7 @@ truly
 trump
 trust
 truth
+turns
 tweet
 twice
 under
@@ -614,6 +640,7 @@ upper
 upset
 urban
 usage
+users
 usual
 valid
 value
