@@ -195,6 +195,7 @@ extra
 facts
 faith
 false
+farts
 fault
 feels
 ferry
@@ -335,6 +336,7 @@ major
 maker
 march
 maria
+masks
 match
 maybe
 mayor
@@ -380,6 +382,7 @@ noted
 novel
 nurse
 nutty
+oaths
 occur
 ocean
 offer
@@ -568,6 +571,7 @@ swell
 table
 taken
 talon
+tarts
 taste
 taxes
 teach
@@ -598,6 +602,7 @@ timid
 tired
 title
 today
+toils
 topic
 total
 touch
