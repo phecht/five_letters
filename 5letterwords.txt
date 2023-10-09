@@ -105,6 +105,7 @@ chill
 china
 chose
 chuck
+chunk
 civic
 civil
 claim
@@ -280,6 +281,7 @@ hopes
 horse
 hosts
 hotel
+howdy
 hound
 hours
 house
@@ -650,6 +652,7 @@ usual
 valid
 value
 video
+viola
 virus
 visit
 vital
@@ -661,6 +664,7 @@ water
 weeks
 weeds
 whale
+wharf
 wheel
 where
 which
