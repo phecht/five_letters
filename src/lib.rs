@@ -108,11 +108,37 @@ impl Instructions {
     }
 }
 
+// Display is the representation of the words alreay picked
+struct Display (Vec<Vec<(char, i32)>>);
+
+impl Display {
+    pub fn new() -> Self {    
+        let display_guesses = vec![];
+        Self(display_guesses)
+    }
+
+    pub fn add_to_display(&mut self, entry: Vec<(char, i32)>) {
+
+        self.0.push(entry);
+        let display_iter = self.0.iter();
+        println!("Previous entries:");
+        for one_entry in display_iter {
+
+            print_entry(one_entry);
+        }
+    }
+    fn default() -> Self {
+        Self::new()
+    }
+}
+ 
+
 // Words might of been better named dictionary.
 pub struct Words(Vec<String>);
 
 impl Words {
     pub fn new() -> Self {
+        // 
         let text = std::fs::read_to_string("./5letterwords.txt").unwrap();
         let words: Vec<String> = text.trim().lines().map(|v| v.to_string()).collect();
         Self(words)
@@ -128,13 +154,13 @@ impl Words {
         let ret = &self.0.contains(&word.to_string());
         *ret
     }
+/*     fn default() -> Self {
+        Self::new()
+    } */
 }
 
-impl Default for Words {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+
+
 fn get_word() -> String {
     let mut std_input_lock = io::stdin().lock();
     let input_word = &mut String::new();
@@ -166,7 +192,12 @@ pub struct Key {
     value: u8,
 }
 
+/*
+print_keys is need to preserve the keyboard, 
+not the actual entry
+*/
 fn print_keys(keys: &Vec<Key>) {
+    println!("Current keyboad:");
     let mut this_row = 0_u8;
     for key in keys {
         if this_row != key.row {
@@ -192,14 +223,7 @@ fn print_entry(keys: &Vec<(char, i32)>) {
             _ => print!("{} ", key.0.to_string().blue()),
         }
     }
-    /*     for i in 0..keys.len() {
-        match keys[i].1 {
-            0 => print!("{} ", keys[i].0.to_string().red()),
-            1 => print!("{} ", keys[i].0.to_string().green()),
-            2 => print!("{} ", keys[i].0.to_string().yellow()),
-            _ => print!("{} ", keys[i].0.to_string().blue()),
-        }
-    } */
+
     println!();
 }
 
@@ -207,8 +231,7 @@ fn update_keys(current_entry: &Vec<(char, i32)>, keyboard: Vec<Key>) -> Vec<Key>
     // update keyboard based on current_entry
     // for each enty check keyboard for a 0,1, or 2.
     let mut ret = keyboard;
-    // let mut character = ' ';
-    // let mut letter_value = 0 as u8;
+
 
     for item in current_entry {
         let character = item.0;
@@ -274,7 +297,11 @@ pub fn run() -> String {
     // Implement the Words public structure to get the answer.
     let binding = Words::new();
     let answer = Words::pick_at_random(&binding);
-    // let answer = "needs";
+
+    // Create a display to show all previous answers
+    let mut entries = Display::default();
+
+    // TEST: let answer = "needs";
 
     if answer.is_empty() {
         return "".to_string();
@@ -308,10 +335,11 @@ pub fn run() -> String {
         }
         grid.push(entry.clone());
         let this_entry = check_answer(grid.clone()).unwrap();
+        entries.add_to_display(this_entry.clone());
         keyboard = update_keys(&this_entry, keyboard.clone());
         print_keys(&keyboard);
-        print_entry(&this_entry);
-        // println!("Length of answer:{} entry:{}", answer.len(), entry.len());
+
+
         if answer.eq(&entry) {
             println!("Match!");
             break;
