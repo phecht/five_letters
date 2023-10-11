@@ -23,6 +23,7 @@ along
 alpha
 alter
 among
+amend
 angel
 anger
 angle
@@ -55,11 +56,13 @@ begun
 being
 below
 bench
+bends
 berth
 billy
 birth
 black
 blame
+blank
 blind
 block
 blond
@@ -77,6 +80,7 @@ brave
 bread
 break
 breed
+bribe
 brief
 bring
 broad
@@ -150,6 +154,7 @@ dealt
 death
 debut
 decay
+decry
 delay
 dense
 depth
@@ -194,7 +199,9 @@ exact
 exist
 extra
 facts
+fades
 faith
+fakes
 false
 farts
 fault
@@ -232,6 +239,7 @@ freak
 freed
 fresh
 front
+frost
 froth
 fruit
 fully
@@ -426,6 +434,7 @@ pluck
 plugs
 poems
 point
+polio
 pools
 ports
 pouch
@@ -446,6 +455,7 @@ pulse
 punts
 queen
 queue
+query
 quest
 quick
 quiet
@@ -466,6 +476,7 @@ ready
 refer
 rerun
 retry
+reuse
 rider
 rides
 right
@@ -534,6 +545,7 @@ spare
 spark
 speak
 speed
+spelt
 spend
 spent
 split
@@ -651,6 +663,7 @@ users
 usual
 valid
 value
+vents
 video
 viola
 virus
